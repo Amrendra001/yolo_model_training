@@ -1,0 +1,6 @@
+path: /home/
+train: png_jpg_data/images/train
+val: png_jpg_data/images/val
+test: png_jpg_data/images/test
+nc: 1
+names: ['Column']
