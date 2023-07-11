@@ -9,10 +9,10 @@ def s3_sync(source, destination):
 
 
 if __name__ == '__main__':
-        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/png_jpg_data/'
-        local_image_path = 'png_jpg_data/'
+        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/cropped_column_data/'
+        local_image_path = 'cropped_column_data/'
         s3_sync(s3_image_path, local_image_path)
 
         model = YOLO("yolov8m.pt")
-        model.train(data="data.yaml", epochs=30, save_period=5, val=True, project='Yolov8m_traning', batch=32, name='Training', cache='ram', close_mosaic=5, single_cls=True)
+        model.train(data="data.yaml", epochs=100, save_period=10, val=True, project='Yolov8m_traning', batch=32, name='Training', cache='ram', close_mosaic=0, single_cls=True)
         model.val(data="data.yaml")
