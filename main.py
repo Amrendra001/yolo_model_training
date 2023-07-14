@@ -8,7 +8,7 @@ def s3_sync(source, destination):
 
 
 if __name__ == '__main__':
-        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/cropped_column_data/'
+        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/auto_training_testing_data/'
         local_image_path = 'cropped_column_data/'
         s3_sync(s3_image_path, local_image_path)
 
