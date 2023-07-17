@@ -1,6 +1,6 @@
 path: /home/ubuntu/yolo_model_training/
-train: cropped_column_data/images/train
-val: cropped_column_data/images/val
-test: cropped_column_data/images/test
+train: png_jpg_data/images/train
+val: png_jpg_data/images/val
+test: png_jpg_data/images/test
 nc: 1
 names: ['Column']
