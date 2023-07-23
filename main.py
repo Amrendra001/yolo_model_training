@@ -1,5 +1,5 @@
 import wandb
-from ultralytics import RTDETR
+from ultralytics import YOLO
 import os
 
 
@@ -13,5 +13,5 @@ if __name__ == '__main__':
         local_image_path = 'png_jpg_data/'
         s3_sync(s3_image_path, local_image_path)
 
-        model = RTDETR("rtdetr-l.pt")
-        model.train(data="data.yaml", epochs=30, save_period=5, val=True, project='RTDETR', batch=16, cache='ram', close_mosaic=5, single_cls=True, augment=False)
+        model = YOLO("yolov8m.pt")
+        model.train(data="data.yaml", epochs=75, save_period=10, val=True, project='Training', batch=32, close_mosaic=10, single_cls=True, augment=True)
