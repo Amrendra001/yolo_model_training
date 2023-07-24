@@ -8,8 +8,8 @@ def s3_sync(source, destination):
 
 
 if __name__ == '__main__':
-        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/png_jpg_data/'
-        local_image_path = 'png_jpg_data/'
+        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/base_data/'
+        local_image_path = 'base_data/'
         s3_sync(s3_image_path, local_image_path)
 
         model = YOLO('yolov8m.pt')
