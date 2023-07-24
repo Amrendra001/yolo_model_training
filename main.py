@@ -1,6 +1,6 @@
 # import wandb
 import os
-from ultralytics import RTDETR, YOLO
+from ultralytics import YOLO
 
 def s3_sync(source, destination):
     sync_command = f"aws s3 sync {source} {destination}"
