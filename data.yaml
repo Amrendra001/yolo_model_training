@@ -1,6 +1,6 @@
 path: /home/ubuntu/yolo_model_training/
-train: base_data/images/train
-val: base_data/images/val
-test: base_data/images/test
+train: png_jpg_data/images/train
+val: png_jpg_data/images/val
+test: png_jpg_data/images/test
 nc: 1
 names: ['Column']
