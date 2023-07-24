@@ -14,4 +14,4 @@ if __name__ == '__main__':
         s3_sync(s3_image_path, local_image_path)
 
         model = RTDETR("rtdetr-l.pt")
-        model.train(data="data.yaml", epochs=5, save_period=10, val=True, project='RTDETR_Training', batch=16, amp=True, single_cls=True, augment=False, cache='ram')
+        model.train(data="data.yaml", epochs=500, save_period=25, val=True, project='RTDETR_Training', batch=16, amp=True, single_cls=True, augment=False, cache='ram')
