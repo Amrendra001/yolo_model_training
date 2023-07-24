@@ -14,4 +14,4 @@ if __name__ == '__main__':
 
         model = RTDETR("rtdetr-l.pt")
         # model = YOLO('yolov8m.pt')
-        model.train(data="data.yaml", epochs=3, batch=32, single_cls=True, cache=True)
+        model.train(data="data.yaml", epochs=3, batch=16, single_cls=True, cache=True)
