@@ -1,5 +1,5 @@
-import wandb
-from ultralytics import YOLO
+# import wandb
+from ultralytics import RTDETR
 import os
 
 
@@ -9,9 +9,9 @@ def s3_sync(source, destination):
 
 
 if __name__ == '__main__':
-        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/png_jpg_data/'
-        local_image_path = 'png_jpg_data/'
+        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/base_data/'
+        local_image_path = 'base_data/'
         s3_sync(s3_image_path, local_image_path)
 
-        model = YOLO("yolov8m.pt")
-        model.train(data="data.yaml", epochs=75, save_period=10, val=False, project='Augment_Training', batch=32, close_mosaic=10, single_cls=True, augment=True)
+        model = RTDETR("rtdetr-l.pt")
+        model.train(data="data.yaml", epochs=5, save_period=10, val=True, project='RTDETR_Training', batch=16, single_cls=True, augment=False, cache='ram')
