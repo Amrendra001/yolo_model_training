@@ -1,4 +1,4 @@
-# import wandb
+import wandb
 import os
 from ultralytics import YOLO
 
