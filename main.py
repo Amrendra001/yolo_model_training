@@ -13,4 +13,4 @@ if __name__ == '__main__':
         s3_sync(s3_image_path, local_image_path)
 
         model = YOLO('yolov8m.pt')
-        model.train(data="data.yaml", epochs=3, batch=32, single_cls=True, cache=True, augment=True)
+        model.train(data="data.yaml", epochs=100, save_period=10, batch=32, single_cls=True, cache=True, augment=True, close_mosaic=25)
