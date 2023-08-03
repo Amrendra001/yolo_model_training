@@ -36,4 +36,4 @@ if __name__ == '__main__':
         'scale': 0,
     }
     training(params, training_name)
-    # os.system(f'rm -r {project_name}')
+    os.system(f'rm -r {project_name}')
