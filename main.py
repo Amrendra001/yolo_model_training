@@ -16,6 +16,9 @@ def download_training_set():
 
 if __name__ == '__main__':
 
+    project_name = 'Testing'
+    training_name = 'Simple'
+
     download_training_set()
     download_test_data()
 
@@ -26,8 +29,8 @@ if __name__ == '__main__':
         'batch': 32,
         'single_cls': True,
         'cache': True,
-        'project': 'Testing',
-        'name': 'simple',
+        'project': project_name,
+        'name': training_name,
     }
     training(params)
-    # os.system(f'rm -r runs')
+    os.system(f'rm -r {project_name}')
