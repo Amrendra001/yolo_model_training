@@ -24,13 +24,16 @@ if __name__ == '__main__':
 
     params = {
         'data': "data.yaml",
-        'epochs': 1,
+        'epochs': 100,
         # 'save_period': 100,
         'batch': 32,
         'single_cls': True,
         'cache': True,
         'project': project_name,
         'name': training_name,
+        'lr0': 0.001,
+        'lrf': 0.1,
+        'mosaic': 0,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
