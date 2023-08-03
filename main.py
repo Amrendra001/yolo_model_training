@@ -1,16 +1,30 @@
-import wandb
+from train import training
 import os
-from ultralytics import YOLO
+from testing import download_test_data
+
 
 def s3_sync(source, destination):
     sync_command = f"aws s3 sync {source} {destination}"
     os.system(sync_command)
 
 
-if __name__ == '__main__':
-        s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/base_data/'
-        local_image_path = 'base_data/'
-        s3_sync(s3_image_path, local_image_path)
+def download_training_set():
+    s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/new_smaller_training_data/'
+    local_image_path = 'new_smaller_training_data/'
+    s3_sync(s3_image_path, local_image_path)
 
-        model = YOLO('yolov8m.pt')
-        model.train(data="data.yaml", epochs=100, save_period=10, batch=32, single_cls=True, cache=True, augment=True, close_mosaic=25, fliplr=0.01, scale=0.1)
+
+if __name__ == '__main__':
+
+    download_training_set()
+    download_test_data()
+
+    params = {
+        'data': "data.yaml",
+        'epochs': 1,
+        # 'save_period': 10,
+        'batch': 32,
+        'single_cls': True,
+        'cache': True,
+    }
+    training(params)
