@@ -26,5 +26,8 @@ if __name__ == '__main__':
         'batch': 32,
         'single_cls': True,
         'cache': True,
+        'project': 'Testing',
+        'name': 'simple',
     }
     training(params)
+    # os.system(f'rm -r runs')
