@@ -26,7 +26,7 @@ if __name__ == '__main__':
         'data': "data.yaml",
         'epochs': 100,
         # 'save_period': 100,
-        'batch': 16,
+        'batch': 8,
         'single_cls': True,
         'cache': True,
         'project': project_name,
