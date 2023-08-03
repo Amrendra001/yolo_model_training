@@ -7,7 +7,7 @@ if __name__ == '__main__':
     project_name = 'Testing'
     training_name = '500_epochs'
 
-    ls = glob(f'{project_name}/{training_name}/*.pt')
+    ls = glob(f'{project_name}/{training_name}/weights/*.pt')
     for path in ls:
         model = YOLO(path)
         localisation_inference(model, path, training_name)
