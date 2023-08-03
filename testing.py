@@ -213,7 +213,7 @@ def get_table_dims(xywh):
 
 def column_model_inference(model, image_path):
     image = Image.open(image_path)
-    result = model(image)
+    result = model(image, verbose=False)
     box_xywhn_ls = []
     for res in result:
         for box in res.boxes:
@@ -252,20 +252,6 @@ def get_mail_body(model_result):
             output += f'{score} for model={model_result[thresh_iou][score]:.4f} <br>'
         output += '<br>'
     return output
-
-
-def is_new_model_better(best_result, model_result):
-    """
-        Check if current model is better than best model.
-    :param best_result: Best run result.
-    :param model_result: Current model result.
-    :return:
-    """
-    for thresh_iou in model_result.keys():
-        if model_result[thresh_iou]['Column Seprators F1 Score'] > best_result[thresh_iou]['Column Seprators F1 Score']:
-            return True  # This is only for single threshold value. If multiple threshold are present then this needs
-            # to be changed.
-    return False
 
 
 def download_test_data():
