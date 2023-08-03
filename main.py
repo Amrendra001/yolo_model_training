@@ -32,5 +32,5 @@ if __name__ == '__main__':
         'project': project_name,
         'name': training_name,
     }
-    training(params)
+    training(params, training_name)
     # os.system(f'rm -r {project_name}')

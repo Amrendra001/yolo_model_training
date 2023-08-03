@@ -258,7 +258,7 @@ def download_test_data():
     s3_sync(f's3://{TEST_S3_BUCKET}/{TEST_S3_PATH}/', f'{LOCAL_DATA_DIR}/')
 
 
-def localisation_inference(model_col, params):
+def localisation_inference(model_col, params, training_name):
     real_path = f'{LOCAL_DATA_DIR}/labels/'
     pred_path = f'{LOCAL_DATA_DIR}/model_outputs/'
     test_data_df = pd.read_csv(f'test_set_v1.csv')  # Read test data csv
@@ -280,7 +280,7 @@ def localisation_inference(model_col, params):
 
     print('Starting sending email.')
     final_output = str(params) + '<br>' + mail_body + '<br>' + bucket_output  # Combine all result to be sent on mail
-    call_email_lambda(final_output, 'Table Localisation')  # Send all the results by mail
+    call_email_lambda(final_output, training_name)  # Send all the results by mail
     print('Completed sending email.')
 
     return None
