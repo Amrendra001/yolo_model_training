@@ -17,7 +17,7 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing'
-    training_name = 'imgsz'
+    training_name = 'rtdetr'
 
     download_training_set()
     download_test_data()
@@ -26,14 +26,13 @@ if __name__ == '__main__':
         'data': "data.yaml",
         'epochs': 100,
         # 'save_period': 100,
-        'batch': 8,
+        'batch': 16,
         'single_cls': True,
         'cache': True,
         'project': project_name,
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        'imgsz': 1280,
     }
     training(params, training_name)
     os.system(f'rm -r {project_name}')
