@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     params = {
         'data': "data.yaml",
-        'epochs': 1,
+        'epochs': 100,
         # 'save_period': 10,
         'batch': 32,
         'single_cls': True,
