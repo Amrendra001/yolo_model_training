@@ -7,7 +7,9 @@ if __name__ == '__main__':
     project_name = 'Testing'
     training_name = 'imgsz3'
 
-    ls = glob(f'{project_name}/{training_name}/weights/*.pt')
-    for path in ls:
-        model = YOLO(path)
-        localisation_inference(model, path, training_name)
+    # ls = glob(f'{project_name}/{training_name}/weights/*.pt')
+    # for path in ls:
+    #     model = YOLO(path)
+    #     localisation_inference(model, path, training_name)
+    model = YOLO('YOLO_V8m_column_old.pt')
+    localisation_inference(model, project_name, training_name)
