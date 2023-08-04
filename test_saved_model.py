@@ -31,5 +31,5 @@ if __name__ == '__main__':
     # for path in ls:
     #     model = YOLO(path)
     #     localisation_inference(model, path, training_name)
-    model = YOLO('YOLO_V8m_column.pt')
+    model = YOLO('yolo_v8m_jpg_png.pt')
     localisation_inference(model, project_name, training_name)
