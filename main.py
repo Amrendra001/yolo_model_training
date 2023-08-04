@@ -17,7 +17,7 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing'
-    training_name = 'adam'
+    training_name = 'yolov8m'
 
     download_training_set()
     download_test_data()
@@ -33,7 +33,6 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        'optimizer': 'Adam',
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
