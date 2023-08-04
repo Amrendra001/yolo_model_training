@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-from table_localisation.global_variables import LOCAL_DATA_DIR
+from global_variables import LOCAL_DATA_DIR
 
 
 def intersection_over_union_2D(gt_box, pred_box):
