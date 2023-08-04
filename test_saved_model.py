@@ -21,7 +21,7 @@ if __name__ == '__main__':
     project_name = 'Testing'
     training_name = 'imgsz_testing'
 
-    download_training_set()
+    # download_training_set()
     download_test_data()
 
     project_name = 'Testing'
