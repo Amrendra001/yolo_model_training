@@ -228,6 +228,7 @@ def column_model_inference(model, image_path):
 def get_model_output_multiprocessing(model_col):
     image_paths = glob(f'{LOCAL_DATA_DIR}/images/*.png')
     for image_path in image_paths:
+        print(image_path)
         image_name = image_path[image_path.rfind('/')+1:]
         label_name = image_name[:-3] + 'json'
         output = column_model_inference(model_col, image_path)
