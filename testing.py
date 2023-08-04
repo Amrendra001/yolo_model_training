@@ -213,7 +213,7 @@ def get_table_dims(xywh):
 
 def column_model_inference(model, image_path):
     image = Image.open(image_path)
-    result = model(image, verbose=False)
+    result = model(image, verbose=True)
     box_xywhn_ls = []
     for res in result:
         for box in res.boxes:
