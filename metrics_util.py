@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-from global_variables import LOCAL_DATA_DIR
+from table_localisation.global_variables import LOCAL_DATA_DIR
 
 
 def intersection_over_union_2D(gt_box, pred_box):
@@ -20,6 +20,8 @@ def intersection_over_union_2D(gt_box, pred_box):
     union = gt_box[2] * gt_box[3] + pred_box[2] * pred_box[3] - intersection
 
     iou = intersection / union
+    if iou<0:
+        return 0
 
     return iou
 
@@ -104,30 +106,39 @@ def precision_recall(TP, FP, FN):
     return precision, recall
 
 
-def check_in_between(df_ocr, intersection):
-    y1, y2 = intersection
-    words_between = df_ocr[(df_ocr['midy'] >= y1) & (df_ocr['midy'] <= y2)]
+def read_ocr(filename, page_no):
+    ocr_path = f'{LOCAL_DATA_DIR}/ocr/{filename}.parquet'
+    df_ocr = pd.read_parquet(ocr_path)
+    df_ocr = df_ocr[df_ocr['page'] == page_no]
+    df_ocr.loc[:, 'midx'] = (df_ocr['minx'] + df_ocr['maxx']) / 2
+    df_ocr.loc[:, 'midy'] = (df_ocr['miny'] + df_ocr['maxy']) / 2
+    return df_ocr
+
+
+def check_in_between(df_ocr, intersection, is_column):
+    p1, p2 = intersection
+    if is_column:
+        words_between = df_ocr[(df_ocr['midx'] >= p1) & (df_ocr['midx'] <= p2)]
+    else:
+        words_between = df_ocr[(df_ocr['midy'] >= p1) & (df_ocr['midy'] <= p2)]
     if words_between.empty:
         return False
     else:
         return True
 
 
-def check_char(doc_id, page_no, real_line, pred_line):
-    ocr_path = f'{LOCAL_DATA_DIR}/ocr/{doc_id}.parquet'
-    df_ocr = pd.read_parquet(ocr_path)
-    df_ocr = df_ocr[df_ocr['page'] == page_no]
-    df_ocr.loc[:, 'midy'] = (df_ocr['miny']+df_ocr['maxy'])/2
+def check_char(real_line, pred_line, df_ocr, is_column):
+
     intersection_1 = [min(real_line[0], pred_line[0]), max(real_line[0], pred_line[0])]
     intersection_2 = [min(real_line[1], pred_line[1]), max(real_line[1], pred_line[1])]
 
-    tot = check_in_between(df_ocr, intersection_1) + check_in_between(df_ocr, intersection_2)
+    tot = check_in_between(df_ocr, intersection_1, is_column) + check_in_between(df_ocr, intersection_2, is_column)
     if tot > 0:
         return False
     return True
 
 
-def confusion_matrix(real, pred, thresh_iou, do_char_check=False, doc_id="", page_no=None):
+def confusion_matrix(real, pred, thresh_iou, do_char_check, df_ocr, is_column):
     """
         Function which gets the list of ground truth and list of predicted lines as input and returns the number of TP, FP and FN.
         real: List of ground truth lines.
@@ -143,11 +154,12 @@ def confusion_matrix(real, pred, thresh_iou, do_char_check=False, doc_id="", pag
     for pred_line in pred_col_lines:
         match, idx = match_prediction(real_col_lines, pred_line, real_col_lines_match, thresh_iou, "1D", return_line=True)
         if match and do_char_check:
-            val = check_char(doc_id, page_no, real_col_lines[idx], pred_line)
+            val = check_char(real_col_lines[idx], pred_line, df_ocr, is_column)
             if val:
                 TP += 1
             else:
                 FP += 1
+                real_col_lines_match[idx] = 0
         elif match:
             TP += 1
         else:
@@ -159,7 +171,7 @@ def confusion_matrix(real, pred, thresh_iou, do_char_check=False, doc_id="", pag
 
 def table_score(real_table_coord, pred_table_coord):
     """
-        Function to calculate the IOU score for for the predicted table.
+        Function to calculate the IOU score for the predicted table.
         real_table_coord: Ground truth table bounding box. [x, y, width, height]
         pred_table_coord: Predicted table bounding box. [x, y, width, height]
     """
@@ -169,7 +181,7 @@ def table_score(real_table_coord, pred_table_coord):
 def get_real_json(prefix, name):
     """
         Function to read the json files containing the predictions.
-        prefix: Path where all the predctions (json files) are stored.
+        prefix: Path where all the predictions (json files) are stored.
         doc_id: The Doc_ID of the image for which we want the prediction for.
         page_no: The Page number of the image in the pdf for which we want the predictions for.
     """
@@ -180,7 +192,7 @@ def get_real_json(prefix, name):
     return data
 
 
-def metrics_table(real_path, pred_path, name):
+def metrics_table(real_path, pred_path, filename):
     """
         Function to read the ground truth and prediction json files and return the table score.
         real_path: Path to the ground truth json files.
@@ -188,6 +200,7 @@ def metrics_table(real_path, pred_path, name):
         doc_id: The Doc_ID of the image for which we want the prediction for.
         page_no: The Page number of the image in the pdf for which we want the predictions for.
     """
+    name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
 
@@ -199,7 +212,7 @@ def metrics_table(real_path, pred_path, name):
     return table_score(real_table_coord, pred_table_coord)
 
 
-def metrics_col(real_path, pred_path, name, doc_id, thresh_iou, page_no=None):
+def metrics_col(real_path, pred_path, filename, thresh_iou, page_no):
     """
         Function to read the ground truth and prediction json files and return the confusion matrix (TP, FP, FN, precision, recall) for the column seprators.
         real_path: Path to the ground truth json files.
@@ -207,9 +220,10 @@ def metrics_col(real_path, pred_path, name, doc_id, thresh_iou, page_no=None):
         doc_id: The Doc_ID of the image for which we want the prediction for.
         page_no: The Page number of the image in the pdf for which we want the predictions for.
     """
-    name = name[:name.rfind('.')] + '.json'
+    name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
+    df_ocr = read_ocr(filename, page_no)
 
     real_table_coord = list(map(float, real_json['table_coordinates'].split(',')))
     if pred_json['table_coordinates']:
@@ -225,10 +239,10 @@ def metrics_col(real_path, pred_path, name, doc_id, thresh_iou, page_no=None):
     real_column_sep = [real_table_coord[0]] + real_column_sep + [real_table_coord[0] + real_table_coord[2]]
     pred_column_sep = [pred_table_coord[0]] + pred_column_sep + [pred_table_coord[0] + pred_table_coord[2]]
 
-    return confusion_matrix(real_column_sep, pred_column_sep, thresh_iou, True, doc_id, page_no)
+    return confusion_matrix(real_column_sep, pred_column_sep, thresh_iou, True, df_ocr, is_column=True)
 
 
-def metrics_row(real_path, pred_path, name, doc_id, thresh_iou, page_no=None):
+def metrics_row(real_path, pred_path, filename, thresh_iou, page_no):
     """
         Function to read the ground truth and prediction json files and return the confusion matrix (TP, FP, FN, precision, recall) for the row seprators.
         real_path: Path to the ground truth json files.
@@ -236,9 +250,10 @@ def metrics_row(real_path, pred_path, name, doc_id, thresh_iou, page_no=None):
         doc_id: The Doc_ID of the image for which we want the prediction for.
         page_no: The Page number of the image in the pdf for which we want the predictions for.
     """
-    name = name[:name.rfind('.')] + '.json'
+    name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
+    df_ocr = read_ocr(filename, page_no)
 
     real_table_coord = list(map(float, real_json['table_coordinates'].split(',')))
     pred_table_coord = list(map(float, real_json['table_coordinates'].split(',')))
@@ -253,10 +268,10 @@ def metrics_row(real_path, pred_path, name, doc_id, thresh_iou, page_no=None):
     real_row_sep = [real_table_coord[1]] + real_row_sep + [real_table_coord[1] + real_table_coord[3]]
     pred_row_sep = [pred_table_coord[1]] + pred_row_sep + [pred_table_coord[1] + pred_table_coord[3]]
 
-    return confusion_matrix(real_row_sep, pred_row_sep, thresh_iou, True, doc_id, page_no)
+    return confusion_matrix(real_row_sep, pred_row_sep, thresh_iou, True, df_ocr, is_column=False)
 
 
-def check_table(real_path, pred_path, name):
+def check_table(real_path, pred_path, filename):
     """
         Function to check if the table exits in the ground truth and the predictions.
         real_path: Path to the ground truth json files.
@@ -264,13 +279,13 @@ def check_table(real_path, pred_path, name):
         doc_id: The Doc_ID of the image for which we want the prediction for.
         page_no: The Page number of the image in the pdf for which we want the predictions for.
     """
-    name = name[:name.rfind('.')] + '.json'
+    name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
     return 'table_coordinates' in real_json.keys() and 'table_coordinates' in pred_json.keys()
 
 
-def check_column(real_path, pred_path, name):
+def check_column(real_path, pred_path, filename):
     """
         Function to check if the column seprators exits in the ground truth and the predictions.
         real_path: Path to the ground truth json files.
@@ -278,13 +293,13 @@ def check_column(real_path, pred_path, name):
         doc_id: The Doc_ID of the image for which we want the prediction for.
         page_no: The Page number of the image in the pdf for which we want the predictions for.
     """
-    name = name[:name.rfind('.')] + '.json'
+    name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
     return 'column_separators' in real_json.keys() and 'column_separators' in pred_json.keys()
 
 
-def check_row(real_path, pred_path, name):
+def check_row(real_path, pred_path, filename):
     """
         Function to check if the row seprators exits in the ground truth and the predictions.
         real_path: Path to the ground truth json files.
@@ -292,7 +307,7 @@ def check_row(real_path, pred_path, name):
         doc_id: The Doc_ID of the image for which we want the prediction for.
         page_no: The Page number of the image in the pdf for which we want the predictions for.
     """
-    name = name[:name.rfind('.')] + '.json'
+    name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
     return 'row_separators' in real_json.keys() and 'row_separators' in pred_json.keys()

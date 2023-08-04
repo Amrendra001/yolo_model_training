@@ -35,19 +35,18 @@ def get_score(df, real_path, pred_path, thresholds):
         table_score_ls = []
         for filename, page_no in zip(df['file_name'], df['page_number_index']):
             page_no -= 1
-            doc_id = filename[:filename.rfind('.')]
-            filename = filename[:filename.rfind('.')] + '.json'
+            filename = filename[:filename.rfind('.')]
 
             if check_table(real_path, pred_path, filename):
                 table_score = metrics_table(real_path, pred_path, filename)
                 table_score_ls.append(table_score)
 
             if check_column(real_path, pred_path, filename):
-                TP, FP, FN = metrics_col(real_path, pred_path, filename, doc_id, thresh_iou)
+                TP, FP, FN = metrics_col(real_path, pred_path, filename, thresh_iou, page_no)
                 cum_TP_col, cum_FP_col, cum_FN_col = add(cum_TP_col, cum_FP_col, cum_FN_col, TP, FP, FN)
 
             if check_row(real_path, pred_path, filename):
-                TP, FP, FN = metrics_row(real_path, pred_path, filename, doc_id, thresh_iou, page_no)
+                TP, FP, FN = metrics_row(real_path, pred_path, filename, thresh_iou, page_no)
                 cum_TP_row, cum_FP_row, cum_FN_row = add(cum_TP_row, cum_FP_row, cum_FN_row, TP, FP, FN)
 
         thresh_key = str(thresh_iou)
@@ -100,20 +99,19 @@ def get_bucket_analysis(df_org, real_path, pred_path, thresholds):
                 table_score_ls = []
                 for filename, page_no in zip(df['file_name'], df['page_number_index']):
                     page_no -= 1
-                    doc_id = filename[:filename.rfind('.')]
-                    filename = filename[:filename.rfind('.')] + '.json'
+                    filename = filename[:filename.rfind('.')]
                     if check_table(real_path, pred_path, filename):
                         table_score = metrics_table(real_path, pred_path, filename)
                         table_score_ls.append(table_score)
 
                     if check_column(real_path, pred_path, filename):
-                        TP, FP, FN = metrics_col(real_path, pred_path, filename, doc_id, thresh_iou)
+                        TP, FP, FN = metrics_col(real_path, pred_path, filename, thresh_iou, page_no)
                         cum_TP_col += TP
                         cum_FP_col += FP
                         cum_FN_col += FN
 
                     if check_row(real_path, pred_path, filename):
-                        TP, FP, FN = metrics_row(real_path, pred_path, filename, doc_id, thresh_iou)
+                        TP, FP, FN = metrics_row(real_path, pred_path, filename, thresh_iou, page_no)
                         cum_TP_row += TP
                         cum_FP_row += FP
                         cum_FN_row += FN
