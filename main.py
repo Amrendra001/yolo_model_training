@@ -33,6 +33,7 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
+        'resume': True,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
