@@ -17,7 +17,7 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'scale'
+    training_name = 'hsv'
 
     download_training_set()
     download_test_data()
@@ -33,7 +33,9 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        'scale': 0,
+        'hsv_h': 0,
+        'hsv_s': 0,
+        'hsv_v': 0,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
