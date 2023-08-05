@@ -6,7 +6,7 @@ from PIL import Image
 import statistics
 
 from metrics_util import precision_recall, metrics_table, metrics_col, metrics_row, check_table, \
-    check_column, check_row
+    check_column, check_row, read_ocr
 from global_variables import LOCAL_DATA_DIR, TEST_S3_BUCKET, TEST_S3_PATH, BEST_RESULT_S3_PATH
 from lambda_utils import call_email_lambda, invoke_lambda
 from utils import s3_cp, s3_sync, get_best_result
@@ -40,13 +40,14 @@ def get_score(df, real_path, pred_path, thresholds):
             if check_table(real_path, pred_path, filename):
                 table_score = metrics_table(real_path, pred_path, filename)
                 table_score_ls.append(table_score)
+                df_ocr = read_ocr(filename, page_no, real_path)
 
             if check_column(real_path, pred_path, filename):
-                TP, FP, FN = metrics_col(real_path, pred_path, filename, thresh_iou, page_no)
+                TP, FP, FN = metrics_col(real_path, pred_path, filename, thresh_iou, df_ocr)
                 cum_TP_col, cum_FP_col, cum_FN_col = add(cum_TP_col, cum_FP_col, cum_FN_col, TP, FP, FN)
 
             if check_row(real_path, pred_path, filename):
-                TP, FP, FN = metrics_row(real_path, pred_path, filename, thresh_iou, page_no)
+                TP, FP, FN = metrics_row(real_path, pred_path, filename, thresh_iou, df_ocr)
                 cum_TP_row, cum_FP_row, cum_FN_row = add(cum_TP_row, cum_FP_row, cum_FN_row, TP, FP, FN)
 
         thresh_key = str(thresh_iou)
@@ -103,15 +104,16 @@ def get_bucket_analysis(df_org, real_path, pred_path, thresholds):
                     if check_table(real_path, pred_path, filename):
                         table_score = metrics_table(real_path, pred_path, filename)
                         table_score_ls.append(table_score)
+                        df_ocr = read_ocr(filename, page_no, real_path)
 
                     if check_column(real_path, pred_path, filename):
-                        TP, FP, FN = metrics_col(real_path, pred_path, filename, thresh_iou, page_no)
+                        TP, FP, FN = metrics_col(real_path, pred_path, filename, thresh_iou, df_ocr)
                         cum_TP_col += TP
                         cum_FP_col += FP
                         cum_FN_col += FN
 
                     if check_row(real_path, pred_path, filename):
-                        TP, FP, FN = metrics_row(real_path, pred_path, filename, thresh_iou, page_no)
+                        TP, FP, FN = metrics_row(real_path, pred_path, filename, thresh_iou, df_ocr)
                         cum_TP_row += TP
                         cum_FP_row += FP
                         cum_FN_row += FN

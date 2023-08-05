@@ -5,7 +5,7 @@ from testing import localisation_inference
 
 if __name__ == '__main__':
 
-    project_name = 'Testing_2'
+    project_name = 'Testing'
     training_name = '500_epochs'
 
     ls = glob(f'{project_name}/{training_name}/weights/*.pt')

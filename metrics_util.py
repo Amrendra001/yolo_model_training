@@ -6,18 +6,18 @@ from global_variables import LOCAL_DATA_DIR
 def intersection_over_union_2D(gt_box, pred_box):
     """
         Function to calculate the IOU score for 2D-boxes.
-        gt_box: Ground truth bounding box. [x, y, width, height]
-        pred_box: Predicted bounding box. [x, y, width, height]
+        gt_box: Ground truth bounding box. [left, top, right, bottom]
+        pred_box: Predicted bounding box. [left, top, right, bottom]
     """
     inter_box_top_left = [max(gt_box[0], pred_box[0]), max(gt_box[1], pred_box[1])]
-    inter_box_bottom_right = [min(gt_box[0] + gt_box[2], pred_box[0] + pred_box[2]),
-                              min(gt_box[1] + gt_box[3], pred_box[1] + pred_box[3])]
+    inter_box_bottom_right = [min(gt_box[2], pred_box[2]), min(gt_box[3], pred_box[3])]
 
     inter_box_w = inter_box_bottom_right[0] - inter_box_top_left[0]
     inter_box_h = inter_box_bottom_right[1] - inter_box_top_left[1]
 
     intersection = inter_box_w * inter_box_h
-    union = gt_box[2] * gt_box[3] + pred_box[2] * pred_box[3] - intersection
+    union = (gt_box[2] - gt_box[0]) * (gt_box[3] - gt_box[1]) + (pred_box[2] - pred_box[0]) * (
+            pred_box[3] - pred_box[1]) - intersection
 
     iou = intersection / union
     if iou<0:
@@ -106,10 +106,15 @@ def precision_recall(TP, FP, FN):
     return precision, recall
 
 
-def read_ocr(filename, page_no):
+def read_ocr(filename, page_no, real_path):
+    name = filename + '.json'
+    real_json = get_real_json(real_path, name)
+    real_table_coord = list(map(float, real_json['table_coordinates'].split(',')))
+    l, t, r, b = real_table_coord
+
     ocr_path = f'{LOCAL_DATA_DIR}/ocr/{filename}.parquet'
     df_ocr = pd.read_parquet(ocr_path)
-    df_ocr = df_ocr[df_ocr['page'] == page_no]
+    df_ocr = df_ocr[(df_ocr['page'] == page_no) & (df_ocr['minx']>=l) & (df_ocr['maxx']<=r) & (df_ocr['miny']>=t) & (df_ocr['maxy']<=b)]
     df_ocr.loc[:, 'midx'] = (df_ocr['minx'] + df_ocr['maxx']) / 2
     df_ocr.loc[:, 'midy'] = (df_ocr['miny'] + df_ocr['maxy']) / 2
     return df_ocr
@@ -212,7 +217,7 @@ def metrics_table(real_path, pred_path, filename):
     return table_score(real_table_coord, pred_table_coord)
 
 
-def metrics_col(real_path, pred_path, filename, thresh_iou, page_no):
+def metrics_col(real_path, pred_path, filename, thresh_iou, df_ocr):
     """
         Function to read the ground truth and prediction json files and return the confusion matrix (TP, FP, FN, precision, recall) for the column seprators.
         real_path: Path to the ground truth json files.
@@ -223,7 +228,6 @@ def metrics_col(real_path, pred_path, filename, thresh_iou, page_no):
     name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
-    df_ocr = read_ocr(filename, page_no)
 
     real_table_coord = list(map(float, real_json['table_coordinates'].split(',')))
     if pred_json['table_coordinates']:
@@ -236,13 +240,13 @@ def metrics_col(real_path, pred_path, filename, thresh_iou, page_no):
         return TP, FP, FN
     pred_column_sep = list(map(float, pred_json['column_separators'].split(',')))
 
-    real_column_sep = [real_table_coord[0]] + real_column_sep + [real_table_coord[0] + real_table_coord[2]]
-    pred_column_sep = [pred_table_coord[0]] + pred_column_sep + [pred_table_coord[0] + pred_table_coord[2]]
+    real_column_sep = [real_table_coord[0]] + real_column_sep + [real_table_coord[2]]
+    pred_column_sep = [pred_table_coord[0]] + pred_column_sep + [pred_table_coord[2]]
 
     return confusion_matrix(real_column_sep, pred_column_sep, thresh_iou, True, df_ocr, is_column=True)
 
 
-def metrics_row(real_path, pred_path, filename, thresh_iou, page_no):
+def metrics_row(real_path, pred_path, filename, thresh_iou, df_ocr):
     """
         Function to read the ground truth and prediction json files and return the confusion matrix (TP, FP, FN, precision, recall) for the row seprators.
         real_path: Path to the ground truth json files.
@@ -253,7 +257,6 @@ def metrics_row(real_path, pred_path, filename, thresh_iou, page_no):
     name = filename + '.json'
     real_json = get_real_json(real_path, name)
     pred_json = get_real_json(pred_path, name)
-    df_ocr = read_ocr(filename, page_no)
 
     real_table_coord = list(map(float, real_json['table_coordinates'].split(',')))
     pred_table_coord = list(map(float, real_json['table_coordinates'].split(',')))
@@ -265,8 +268,8 @@ def metrics_row(real_path, pred_path, filename, thresh_iou, page_no):
         return TP, FP, FN
     pred_row_sep = list(map(float, pred_json['row_separators'].split(',')))
 
-    real_row_sep = [real_table_coord[1]] + real_row_sep + [real_table_coord[1] + real_table_coord[3]]
-    pred_row_sep = [pred_table_coord[1]] + pred_row_sep + [pred_table_coord[1] + pred_table_coord[3]]
+    real_row_sep = [real_table_coord[1]] + real_row_sep + [real_table_coord[3]]
+    pred_row_sep = [pred_table_coord[1]] + pred_row_sep + [pred_table_coord[3]]
 
     return confusion_matrix(real_row_sep, pred_row_sep, thresh_iou, True, df_ocr, is_column=False)
 
