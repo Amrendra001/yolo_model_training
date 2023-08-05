@@ -1,7 +1,8 @@
 from train import training
 import os
 from testing import download_test_data
-
+import matplotlib.pyplot as plt
+%matplotlib inline
 
 def s3_sync(source, destination):
     sync_command = f"aws s3 sync {source} {destination}"
