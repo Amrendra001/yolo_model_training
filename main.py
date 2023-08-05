@@ -17,15 +17,15 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_2'
-    training_name = 'Testing'
+    training_name = '500_epochs'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 1,
-        # 'save_period': 100,
+        'epochs': 500,
+        'save_period': 100,
         'save': False,
         'batch': 32,
         'single_cls': True,
