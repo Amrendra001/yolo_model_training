@@ -17,14 +17,14 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'pose'
+    training_name = 'cache'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 100,
+        'epochs': 1,
         # 'save_period': 100,
         'batch': 32,
         'single_cls': True,
@@ -33,7 +33,6 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        'pose': 0.5,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
