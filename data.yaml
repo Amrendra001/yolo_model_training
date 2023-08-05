@@ -1,4 +1,4 @@
-path: /home/ec2-user/yolo_model_training/
+path: /home/ubuntu/yolo_model_training/
 train: new_smaller_training_data/images/train
 val: new_smaller_training_data/images/val
 test: new_smaller_training_data/images/test
