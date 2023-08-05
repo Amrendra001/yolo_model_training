@@ -9,11 +9,11 @@ def intersection_over_union_2D(gt_box, pred_box):
         gt_box: Ground truth bounding box. [left, top, right, bottom]
         pred_box: Predicted bounding box. [left, top, right, bottom]
     """
-    inter_box_top_left = [max(gt_box[0], pred_box[0]), max(gt_box[1], pred_box[1])]
-    inter_box_bottom_right = [min(gt_box[2], pred_box[2]), min(gt_box[3], pred_box[3])]
+    inter_box_left_top = [max(gt_box[0], pred_box[0]), max(gt_box[1], pred_box[1])]
+    inter_box_right_bottom = [min(gt_box[2], pred_box[2]), min(gt_box[3], pred_box[3])]
 
-    inter_box_w = inter_box_bottom_right[0] - inter_box_top_left[0]
-    inter_box_h = inter_box_bottom_right[1] - inter_box_top_left[1]
+    inter_box_w = inter_box_right_bottom[0] - inter_box_left_top[0]
+    inter_box_h = inter_box_right_bottom[1] - inter_box_left_top[1]
 
     intersection = inter_box_w * inter_box_h
     union = (gt_box[2] - gt_box[0]) * (gt_box[3] - gt_box[1]) + (pred_box[2] - pred_box[0]) * (
@@ -177,8 +177,8 @@ def confusion_matrix(real, pred, thresh_iou, do_char_check, df_ocr, is_column):
 def table_score(real_table_coord, pred_table_coord):
     """
         Function to calculate the IOU score for the predicted table.
-        real_table_coord: Ground truth table bounding box. [x, y, width, height]
-        pred_table_coord: Predicted table bounding box. [x, y, width, height]
+        real_table_coord: Ground truth table bounding box. [left, top, right, bottom]
+        pred_table_coord: Predicted table bounding box. [left, top, right, bottom]
     """
     return intersection_over_union(real_table_coord, pred_table_coord, "2D")
 
