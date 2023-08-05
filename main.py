@@ -27,7 +27,7 @@ if __name__ == '__main__':
         'epochs': 2,
         # 'save_period': 100,
         'save': False,
-        'batch': 32,
+        'batch': 16,
         'single_cls': True,
         'cache': True,
         'project': project_name,
