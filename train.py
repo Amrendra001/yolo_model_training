@@ -4,6 +4,6 @@ from testing import localisation_inference
 
 
 def training(params, training_name):
-    model = YOLO('Testing/500_epochs/weights/last.pt')
+    model = YOLO('yolov8s.pt')
     model.train(**params)
     localisation_inference(model, params, training_name)
