@@ -17,15 +17,15 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing'
-    training_name = '500_epochs'
+    training_name = 'close_mosaic'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 500,
-        'save_period': 100,
+        'epochs': 100,
+        # 'save_period': 100,
         'batch': 32,
         'single_cls': True,
         'cache': True,
@@ -33,7 +33,7 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        'resume': True,
+        'mosaic': 0,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
