@@ -16,7 +16,7 @@ def download_training_set():
 
 if __name__ == '__main__':
 
-    project_name = 'Testing'
+    project_name = 'Testing_new'
     training_name = 'close_mosaic'
 
     download_training_set()
