@@ -16,7 +16,7 @@ def download_training_set():
 
 if __name__ == '__main__':
 
-    project_name = 'Testing_2'
+    project_name = 'Testing'
     training_name = '500_epochs'
 
     download_training_set()
@@ -26,7 +26,6 @@ if __name__ == '__main__':
         'data': "data.yaml",
         'epochs': 500,
         'save_period': 100,
-        'save': False,
         'batch': 32,
         'single_cls': True,
         'cache': True,
