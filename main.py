@@ -16,17 +16,17 @@ def download_training_set():
 
 if __name__ == '__main__':
 
-    project_name = 'Yolov8_200'
-    training_name = 'yolov8'
+    project_name = 'RTDETR'
+    training_name = 'detr_300'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 200,
-        'save_period': 25,
-        'batch': 32,
+        'epochs': 300,
+        'save_period': 50,
+        'batch': 16,
         'single_cls': True,
         'cache': True,
         'project': project_name,
