@@ -35,6 +35,8 @@ if __name__ == '__main__':
         'lrf': 0.1,
         'close_mosaic': 100,
         'deterministic': False,
+        'resume': True,
+        'patience': 100,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
