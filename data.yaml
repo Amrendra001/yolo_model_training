@@ -1,4 +1,4 @@
-path: /home/ec2-user/yolo_model_training/
+path: /home/ec2-user/yolo_model_training/datasets/
 train: base_data/images/train
 val: base_data/images/val
 test: base_data/images/test
