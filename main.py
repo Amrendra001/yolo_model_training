@@ -35,7 +35,7 @@ if __name__ == '__main__':
         'lrf': 0.1,
         'mosaic': 0,
         'augment': False,
-        'scale': 0,
+        'scale': 1,
         'translate': 0,
     }
     training(params, training_name)
