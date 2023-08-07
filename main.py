@@ -28,7 +28,7 @@ if __name__ == '__main__':
         # 'save_period': 25,
         'batch': 16,
         'single_cls': True,
-        'cache': 'device',
+        'cache': 'ram',
         'project': project_name,
         'name': training_name,
         'lr0': 0.001,
