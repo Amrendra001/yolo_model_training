@@ -31,7 +31,7 @@ if __name__ == '__main__':
         'cache': 'ram',
         'project': project_name,
         'name': training_name,
-        'lr0': 0.001,
+        'lr0': 0.01,
         'lrf': 0.1,
         'mosaic': 0,
         'augment': False,
