@@ -35,8 +35,6 @@ if __name__ == '__main__':
         'lrf': 0.1,
         'mosaic': 0,
         'augment': False,
-        'scale': 0,
-        'translate': 0,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
