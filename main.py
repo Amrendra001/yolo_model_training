@@ -17,7 +17,7 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'augment'
+    training_name = 'background_white_augment'
 
     download_training_set()
     download_test_data()
