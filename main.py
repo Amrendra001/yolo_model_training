@@ -17,14 +17,14 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'augment_false_translate_0'
+    training_name = 'default'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 3,
+        'epochs': 100,
         # 'save_period': 25,
         'batch': 32,
         'single_cls': True,
@@ -33,10 +33,10 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        'mosaic': 0,
-        'augment': False,
-        'scale': 1,
-        'translate': 0,
+        # 'mosaic': 0,
+        # 'augment': False,
+        # 'scale': 1,
+        # 'translate': 0,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
