@@ -17,7 +17,7 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'only_augment'
+    training_name = 'albumenations'
 
     download_training_set()
     download_test_data()
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         'lr0': 0.001,
         'lrf': 0.1,
         'mosaic': 0,
-        'augment': True,
+        'augment': False,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
