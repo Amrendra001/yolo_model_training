@@ -1,6 +1,6 @@
 path: /home/ec2-user/yolo_model_training/
-train: base_data/images/train
-val: base_data/images/val
-test: base_data/images/test
+train: new_smaller_training_data/images/train
+val: new_smaller_training_data/images/val
+test: new_smaller_training_data/images/test
 nc: 1
 names: ['Column']
