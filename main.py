@@ -10,7 +10,7 @@ def s3_sync(source, destination):
 
 def download_training_set():
     s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/new_smaller_training_data/'
-    local_image_path = 'new_smaller_training_data/'
+    local_image_path = 'datasets/new_smaller_training_data/'
     s3_sync(s3_image_path, local_image_path)
 
 
