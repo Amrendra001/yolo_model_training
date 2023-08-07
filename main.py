@@ -9,15 +9,15 @@ def s3_sync(source, destination):
 
 
 def download_training_set():
-    s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/new_smaller_training_data/'
-    local_image_path = 'datasets/new_smaller_training_data/'
+    s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/new_smaller_training_data_background//'
+    local_image_path = 'datasets/new_smaller_training_data_background//'
     s3_sync(s3_image_path, local_image_path)
 
 
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'default'
+    training_name = 'background_white'
 
     download_training_set()
     download_test_data()
@@ -33,10 +33,10 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        # 'mosaic': 0,
-        # 'augment': False,
-        # 'scale': 1,
-        # 'translate': 0,
+        'mosaic': 0,
+        'augment': False,
+        'scale': 0,
+        'translate': 0,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
