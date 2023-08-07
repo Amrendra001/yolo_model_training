@@ -17,14 +17,14 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'background_white_augment'
+    training_name = 'background_white'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 3,
+        'epochs': 50,
         # 'save_period': 25,
         'batch': 32,
         'single_cls': True,
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         'lr0': 0.001,
         'lrf': 0.1,
         'mosaic': 0,
-        'augment': True,
+        'augment': False,
         'scale': 0,
         'translate': 0,
     }
