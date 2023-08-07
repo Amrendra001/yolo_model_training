@@ -16,23 +16,25 @@ def download_training_set():
 
 if __name__ == '__main__':
 
-    project_name = 'Yolov8'
-    training_name = 'yolov8'
+    project_name = 'Testing_new'
+    training_name = 'only_augment'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 3,
+        'epochs': 100,
         # 'save_period': 25,
-        'batch': 16,
+        'batch': 32,
         'single_cls': True,
         'cache': 'ram',
         'project': project_name,
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
+        'mosaic': 0,
+        'augment': True,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
