@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     params = {
         'data': "data.yaml",
-        'epochs': 3,
+        'epochs': 1,
         # 'save_period': 25,
         'batch': 32,
         'single_cls': True,
@@ -36,6 +36,7 @@ if __name__ == '__main__':
         'mosaic': 0,
         'augment': False,
         'scale': 0,
+        'translate': 0,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
