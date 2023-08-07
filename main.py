@@ -17,15 +17,15 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new'
-    training_name = 'background_white'
+    training_name = 'background_white_yolov8m'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 50,
-        # 'save_period': 25,
+        'epochs': 100,
+        'save_period': 25,
         'batch': 32,
         'single_cls': True,
         'cache': 'ram',
