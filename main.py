@@ -9,32 +9,32 @@ def s3_sync(source, destination):
 
 
 def download_training_set():
-    s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/new_smaller_training_data_background/'
-    local_image_path = 'datasets/new_smaller_training_data_background/'
+    s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/new_smaller_training_data/'
+    local_image_path = 'datasets/new_smaller_training_data'
     s3_sync(s3_image_path, local_image_path)
 
 
 if __name__ == '__main__':
 
-    project_name = 'Testing_new'
-    training_name = 'background_white_yolov8m'
+    project_name = 'Testing_new_2'
+    training_name = 'gpu_test'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 100,
-        'save_period': 25,
+        'epochs': 3,
+        # 'save_period': 25,
         'batch': 32,
         'single_cls': True,
         'cache': 'ram',
         'project': project_name,
         'name': training_name,
-        'lr0': 0.01,
-        'lrf': 0.1,
-        'mosaic': 0,
-        'augment': False,
+        # 'lr0': 0.01,
+        # 'lrf': 0.1,
+        # 'mosaic': 0,
+        # 'augment': False,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
