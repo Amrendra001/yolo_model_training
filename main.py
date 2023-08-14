@@ -17,24 +17,24 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new_2'
-    training_name = 'gpu_test'
+    training_name = '0_to_100'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 3,
-        # 'save_period': 25,
+        'epochs': 100,
+        'save_period': 25,
         'batch': 32,
         'single_cls': True,
         'cache': 'ram',
         'project': project_name,
         'name': training_name,
-        # 'lr0': 0.01,
-        # 'lrf': 0.1,
-        # 'mosaic': 0,
-        # 'augment': False,
+        'lr0': 0.001,
+        'lrf': 0.1,
+        'mosaic': 1,
+        'augment': True,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
