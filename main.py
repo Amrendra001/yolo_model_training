@@ -17,15 +17,15 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new_2'
-    training_name = 'gpu_test'
+    training_name = 'yolov8l_augment'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 3,
-        # 'save_period': 25,
+        'epochs': 500,
+        'save_period': 100,
         'batch': 32,
         'single_cls': True,
         'cache': 'ram',
@@ -33,10 +33,9 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        # 'mosaic': 0,
-        # 'augment': False,
-        # 'scale': 0,
-        # 'translate': 0,
+        'mosaic': 0.1,
+        'augment': True,
+        'scale': 0.2,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
