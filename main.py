@@ -17,15 +17,15 @@ def download_training_set():
 if __name__ == '__main__':
 
     project_name = 'Testing_new_2'
-    training_name = 'yolov8l_augment'
+    training_name = 'yolov8l'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 500,
-        'save_period': 100,
+        'epochs': 100,
+        'save_period': 25,
         'batch': 32,
         'single_cls': True,
         'cache': 'ram',
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         'lr0': 0.001,
         'lrf': 0.1,
         'mosaic': 0.1,
-        'augment': True,
+        'augment': False,
         'scale': 0.2,
         'fliplr': 0.25,
     }
