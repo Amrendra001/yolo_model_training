@@ -36,6 +36,7 @@ if __name__ == '__main__':
         'mosaic': 0.1,
         'augment': True,
         'scale': 0.2,
+        'fliplr': 0.25,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
