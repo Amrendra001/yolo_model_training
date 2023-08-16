@@ -1,5 +1,5 @@
 from glob import glob
-from ultralytics import YOLO
+from ultralytics import YOLO, RTDETR
 from testing import localisation_inference
 
 
@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     ls = glob(f'DETR/weights/*.pt')
     for path in ls:
-        model = YOLO(path)
+        model = RTDETR(path)
         localisation_inference(model, path, training_name)
