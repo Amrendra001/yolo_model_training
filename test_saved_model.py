@@ -6,7 +6,7 @@ from testing import localisation_inference
 if __name__ == '__main__':
 
     project_name = 'Testing_new_2'
-    training_name = 'yolov8l'
+    training_name = 'DETR'
 
     ls = glob(f'DETR/weights/*.pt')
     for path in ls:
