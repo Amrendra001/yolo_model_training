@@ -1,6 +1,6 @@
 path: /home/ubuntu/yolo_model_training/datasets/
-train: new_smaller_training_data/images/train
-val: new_smaller_training_data/images/val
-test: new_smaller_training_data/images/test
+train: pypdfium_data/images/train
+val: pypdfium_data/images/val
+test: pypdfium_data/images/test
 nc: 1
 names: ['Column']
