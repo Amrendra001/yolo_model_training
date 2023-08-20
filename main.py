@@ -16,8 +16,8 @@ def download_training_set():
 
 if __name__ == '__main__':
 
-    project_name = 'ultralytics_8_0_90'
-    training_name = 'yolov8l'
+    project_name = 'ultralytics_8_0_157'
+    training_name = 'yolov8s_ultralytics_latest'
 
     download_training_set()
     download_test_data()
