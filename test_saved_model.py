@@ -6,8 +6,8 @@ from testing import localisation_inference, download_test_data
 if __name__ == '__main__':
     download_test_data()
 
-    project_name = 'pypdfium'
-    training_name = 'yolov8m'
+    project_name = 'ultralytics_8_0_90'
+    training_name = 'yolov8s'
 
     ls = glob(f'{project_name}/{training_name}/weights/*.pt')
     for path in ls:
