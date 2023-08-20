@@ -9,23 +9,23 @@ def s3_sync(source, destination):
 
 
 def download_training_set():
-    s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/pypdfium_data/'
-    local_image_path = 'pypdfium_data/'
+    s3_image_path = 's3://document-ai-training-data/training_data/table_localisation/column/new_smaller_training_data/'
+    local_image_path = 'new_smaller_training_data/'
     s3_sync(s3_image_path, local_image_path)
 
 
 if __name__ == '__main__':
 
-    project_name = 'pypdfium'
-    training_name = 'yolov8m'
+    project_name = 'ultralytics_8_0_90'
+    training_name = 'yolov8s'
 
     download_training_set()
     download_test_data()
 
     params = {
         'data': "data.yaml",
-        'epochs': 300,
-        'save_period': 50,
+        'epochs': 100,
+        'save_period': 25,
         'batch': 32,
         'single_cls': True,
         'cache': 'ram',
@@ -33,11 +33,11 @@ if __name__ == '__main__':
         'name': training_name,
         'lr0': 0.001,
         'lrf': 0.1,
-        'close_mosaic': 200,
+        'mosaic': 0.1,
         'augment': True,
         'scale': 0.2,
         'fliplr': 0.25,
-        'val': False,
+        'val': True,
     }
     training(params, training_name)
     # os.system(f'rm -r {project_name}')
