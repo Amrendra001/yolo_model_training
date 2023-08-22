@@ -211,9 +211,9 @@ def get_table_dims(xywh):
     return dims_str
 
 
-def column_model_inference(model, image_path):
+def column_model_inference(model, image_path, iou):
     image = Image.open(image_path)
-    result = model(image, verbose=False)
+    result = model(image, verbose=False, iou = iou)
     box_xywhn_ls = []
     for res in result:
         for box in res.boxes:
@@ -225,12 +225,12 @@ def column_model_inference(model, image_path):
     return output
 
 
-def get_model_output_multiprocessing(model_col):
+def get_model_output_multiprocessing(model_col, iou):
     image_paths = glob(f'{LOCAL_DATA_DIR}/images/*.png')
     for image_path in image_paths:
         image_name = image_path[image_path.rfind('/')+1:]
         label_name = image_name[:-3] + 'json'
-        output = column_model_inference(model_col, image_path)
+        output = column_model_inference(model_col, image_path, iou)
         if output['column_separators'] is None:
             output['column_separators'] = ''
             output['table_coordinates'] = ''
@@ -258,14 +258,14 @@ def download_test_data():
     s3_sync(f's3://{TEST_S3_BUCKET}/{TEST_S3_PATH}/', f'{LOCAL_DATA_DIR}/')
 
 
-def localisation_inference(model_col, params, training_name):
+def localisation_inference(model_col, params, training_name, iou):
     real_path = f'{LOCAL_DATA_DIR}/labels/'
     pred_path = f'{LOCAL_DATA_DIR}/model_outputs/'
     test_data_df = pd.read_csv(f'test_set_v1.csv')  # Read test data csv
     os.makedirs(pred_path, exist_ok=True)
 
     print('Fetching model output from lambda.')
-    get_model_output_multiprocessing(model_col)  # Get test set predictions for current model.
+    get_model_output_multiprocessing(model_col, iou)  # Get test set predictions for current model.
     print('Completed model output from lambda.')
 
     print('Starting getting model score.')
