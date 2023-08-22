@@ -8,4 +8,4 @@ if __name__ == '__main__':
     for iou in range(1, 10):
         iou /= 10
         model = YOLO('master.pt')
-        localisation_inference(model, f'iou = {iou}', 'master_conf_newconv_testimg', iou)
+        localisation_inference(model, f'conf = {iou}', 'master_conf_newconv_testimg', iou)
